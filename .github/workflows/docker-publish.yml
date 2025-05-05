@@ -1,0 +1,23 @@
+name: Build and Push Docker image
+
+on:
+  push:
+    branches:
+      - main  # Of wijzig dit naar de juiste branch
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DHUBTKEN }}" | docker login -u "${{ secrets.DHUBUSME }}" --password-stdin
+
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DHUBUSME }}/flask-site:latest .
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.DHUBUSME }}/flask-site:latest
